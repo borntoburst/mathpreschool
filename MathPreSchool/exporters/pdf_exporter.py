@@ -23,7 +23,12 @@ class PDFExporter:
         filename,
         worksheet_data
     ):
-
+        pdfmetrics.registerFont(
+            TTFont(
+                "NotoSans",
+                "assets/NotoSans-Regular.ttf"
+            )
+        )
         doc = SimpleDocTemplate(
             filename,
             leftMargin=25,
@@ -36,24 +41,18 @@ class PDFExporter:
 
         title_style = ParagraphStyle(
             "Title",
-            parent=styles["Title"],
-            alignment=TA_CENTER,
-            fontSize=22,
-            leading=26
+            fontName="NotoSans",
+            fontSize=22
         )
 
         section_style = ParagraphStyle(
             "Section",
-            parent=styles["Heading2"],
-            fontSize=15,
-            leading=18
+            fontName="NotoSans"
         )
 
         question_style = ParagraphStyle(
             "Question",
-            parent=styles["Normal"],
-            fontSize=14,
-            leading=18
+            fontName="NotoSans"
         )
 
         content = []
