@@ -78,7 +78,12 @@ if st.button("Generate"):
 
         for i in range(count):
 
-            q = gen.generate(config)
+            while True:
+
+                q = gen.generate(config)
+            
+                if unique_checker.add(q.text):
+                    break
 
             st.write(f"{i+1}. {q.text}")
 
