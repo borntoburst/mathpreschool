@@ -5,7 +5,8 @@ from reportlab.platypus import (
     Table,
     TableStyle
 )
-
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import colors
 from reportlab.lib.styles import (
     getSampleStyleSheet,
