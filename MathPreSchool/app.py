@@ -38,11 +38,35 @@ if st.button("Generate"):
     )
 
     generators = [
-        ("Question 1", CountingGenerator(), config.q1_count),
-        ("Question 2", MissingNumberGenerator(), config.q2_count),
-        ("Question 3", ComparisonGenerator(), config.q3_count),
-        ("Question 4", PatternGenerator(), config.q4_count),
-        ("Question 5", MultiStepGenerator(), config.q5_count)
+        (
+            "CÂU 1. ĐẾM THÊM - ĐẾM BỚT",
+            CountingGenerator(),
+            config.q1_count
+        ),
+    
+        (
+            "CÂU 2. ĐIỀN SỐ CÒN THIẾU",
+            MissingNumberGenerator(),
+            config.q2_count
+        ),
+    
+        (
+            "CÂU 3. SO SÁNH",
+            ComparisonGenerator(),
+            config.q3_count
+        ),
+    
+        (
+            "CÂU 4. TÌM QUY LUẬT",
+            PatternGenerator(),
+            config.q4_count
+        ),
+    
+        (
+            "CÂU 5. TÍNH NHIỀU BƯỚC",
+            MultiStepGenerator(),
+            config.q5_count
+        )
     ]
 
     answers = []
