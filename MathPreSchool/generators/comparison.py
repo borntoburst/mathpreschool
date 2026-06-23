@@ -42,20 +42,31 @@ class ComparisonGenerator:
             )
 
         else:
-
-            base = random.randint(
-                10,
-                config.max_number-10
+            
+            max_base = max(
+                config.min_number,
+                config.max_number - config.finger_limit
             )
-
+        
+            base = random.randint(
+                config.min_number,
+                max_base
+            )
+        
             x = random.randint(
                 1,
-                config.finger_limit
+                min(
+                    config.finger_limit,
+                    config.max_number - base
+                )
             )
-
+        
             y = random.randint(
                 1,
-                config.finger_limit
+                min(
+                    config.finger_limit,
+                    config.max_number - base
+                )
             )
 
             ans = ">" if x>y else "<" if x<y else "="
