@@ -5,13 +5,14 @@ os.makedirs("output", exist_ok=True)
 from exporters.pdf_exporter import PDFExporter
 from exporters.answer_exporter import AnswerExporter
 from models.config import WorksheetConfig
-
+from utils.uniqueness import UniqueQuestionGenerator
 from generators.counting import CountingGenerator
 from generators.missing_number import MissingNumberGenerator
 from generators.comparison import ComparisonGenerator
 from generators.pattern import PatternGenerator
 from generators.multistep import MultiStepGenerator
 
+unique_checker = UniqueQuestionGenerator()
 st.title("MathPreSchool Worksheet Generator")
 
 min_number = st.number_input(
