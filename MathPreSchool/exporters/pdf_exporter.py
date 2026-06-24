@@ -1,3 +1,4 @@
+import os
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
@@ -15,8 +16,6 @@ from reportlab.lib.styles import (
 
 from reportlab.lib.enums import TA_CENTER
 
-import os
-
 BASE_DIR = os.path.dirname(
     os.path.dirname(
         os.path.abspath(__file__)
@@ -29,11 +28,11 @@ FONT_PATH = os.path.join(
     "NotoSans-Regular.ttf"
 )
 
+st.write("FONT_PATH =", FONT_PATH)
+st.write("EXISTS =", os.path.exists(FONT_PATH))
+
 pdfmetrics.registerFont(
-    TTFont(
-        "NotoSans",
-        FONT_PATH
-    )
+    TTFont("NotoSans", FONT_PATH)
 )
 
 class PDFExporter:
