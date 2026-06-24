@@ -28,8 +28,8 @@ FONT_PATH = os.path.join(
     "NotoSans-Regular.ttf"
 )
 
-st.write("FONT_PATH =", FONT_PATH)
-st.write("EXISTS =", os.path.exists(FONT_PATH))
+print("FONT_PATH =", FONT_PATH)
+print("EXISTS =", os.path.exists(FONT_PATH))
 
 pdfmetrics.registerFont(
     TTFont("NotoSans", FONT_PATH)
