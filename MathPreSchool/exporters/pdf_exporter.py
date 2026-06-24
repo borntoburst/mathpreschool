@@ -6,8 +6,8 @@ from reportlab.platypus import (
     Table,
     TableStyle
 )
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
+# from reportlab.pdfbase import pdfmetrics
+# from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import colors
 from reportlab.lib.styles import (
     getSampleStyleSheet,
@@ -16,24 +16,24 @@ from reportlab.lib.styles import (
 
 from reportlab.lib.enums import TA_CENTER
 
-BASE_DIR = os.path.dirname(
-    os.path.dirname(
-        os.path.abspath(__file__)
-    )
-)
+# BASE_DIR = os.path.dirname(
+#     os.path.dirname(
+#         os.path.abspath(__file__)
+#     )
+# )
 
-FONT_PATH = os.path.join(
-    BASE_DIR,
-    "assets",
-    "NotoSans-Regular.ttf"
-)
+# FONT_PATH = os.path.join(
+#     BASE_DIR,
+#     "assets",
+#     "NotoSans-Regular.ttf"
+# )
 
-print("FONT_PATH =", FONT_PATH)
-print("EXISTS =", os.path.exists(FONT_PATH))
+# print("FONT_PATH =", FONT_PATH)
+# print("EXISTS =", os.path.exists(FONT_PATH))
 
-pdfmetrics.registerFont(
-    TTFont("NotoSans", FONT_PATH)
-)
+# pdfmetrics.registerFont(
+#     TTFont("NotoSans", FONT_PATH)
+# )
 
 class PDFExporter:
 
@@ -42,12 +42,12 @@ class PDFExporter:
         filename,
         worksheet_data
     ):
-        pdfmetrics.registerFont(
-            TTFont(
-                "NotoSans",
-                "assets/NotoSans-Regular.ttf"
-            )
-        )
+        # pdfmetrics.registerFont(
+        #     TTFont(
+        #         "NotoSans",
+        #         "assets/NotoSans-Regular.ttf"
+        #     )
+        # )
         doc = SimpleDocTemplate(
             filename,
             leftMargin=25,
@@ -60,7 +60,7 @@ class PDFExporter:
 
         title_style = ParagraphStyle(
             "Title",
-            fontName="NotoSans",
+            fontName="Helvetica",
             fontSize=22
         )
 
