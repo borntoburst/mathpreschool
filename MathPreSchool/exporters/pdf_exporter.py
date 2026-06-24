@@ -15,6 +15,26 @@ from reportlab.lib.styles import (
 
 from reportlab.lib.enums import TA_CENTER
 
+import os
+
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
+)
+
+FONT_PATH = os.path.join(
+    BASE_DIR,
+    "assets",
+    "NotoSans-Regular.ttf"
+)
+
+pdfmetrics.registerFont(
+    TTFont(
+        "NotoSans",
+        FONT_PATH
+    )
+)
 
 class PDFExporter:
 
