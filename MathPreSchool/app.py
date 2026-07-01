@@ -71,12 +71,14 @@ if st.button("Generate"):
     ]
 
     answers = []
+    worksheet_data = []
+    all_answers = []
 
     for title, gen, count in generators:
 
         st.subheader(title)
-
-        for i in range(count):
+        section_questions = []
+        for _ in range(count):
 
             while True:
 
@@ -85,43 +87,30 @@ if st.button("Generate"):
                 if unique_checker.add(q.text):
                     break
 
-            st.write(f"{i+1}. {q.text}")
-
-            answers.append(
-                (q.text,q.answer)
-            )
-
-    st.divider()
-
-    st.subheader("Answer Key")
-
-    for q,a in answers:
-
-        st.write(
-            f"{q} → {a}"
-        )
-
-    worksheet_data = []
-    all_answers = []
-    
-    for title, gen, count in generators:
-        section_questions = []
-
-        for i in range(count):
-
-            q = gen.generate(config)
-
+            st.write(q.text)
             section_questions.append(q)
-
+            
             all_answers.append({
                 "question": q.text,
                 "answer": q.answer
             })
-
         worksheet_data.append({
             "title": title,
             "questions": section_questions
         })
+    st.divider()
+    st.subheader("Answer Key")
+
+    for item in all_answers:
+
+        st.write(
+            f"{item['question']} → {item['answer']}"
+        )
+
+    for q,a in answers:
+        st.write(
+            f"{q} → {a}"
+        )
 
     pdf_exporter = PDFExporter()
 
