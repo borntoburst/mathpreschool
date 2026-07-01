@@ -66,12 +66,14 @@ class PDFExporter:
 
         section_style = ParagraphStyle(
             "Section",
-            fontName="NotoSans"
+            fontName="Helvetica"
         )
 
         question_style = ParagraphStyle(
             "Question",
-            fontName="NotoSans"
+            parent=styles["Normal"],
+            fontName="Helvetica",
+            fontSize=14,
         )
 
         content = []
