@@ -1,7 +1,12 @@
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 
-from theme.fonts import get_font
+from theme.fonts import (
+    register_fonts,
+    get_font,
+)
+
+register_fonts()
 
 FONT = get_font()
 
