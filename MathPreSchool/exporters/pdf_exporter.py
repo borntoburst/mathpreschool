@@ -8,7 +8,6 @@ from reportlab.platypus import (
 
 from reportlab.lib import colors
 
-from theme.fonts import register_fonts
 from theme.styles import (
     TITLE_STYLE,
     SECTION_STYLE,
