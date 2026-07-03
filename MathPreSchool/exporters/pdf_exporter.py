@@ -123,8 +123,4 @@ class PDFExporter:
 
             content.append(Spacer(1, 15))
             
-        from reportlab.pdfbase import pdfmetrics
-
-        print("Registered fonts:")
-        print(pdfmetrics.getRegisteredFontNames())
         doc.build(content)
