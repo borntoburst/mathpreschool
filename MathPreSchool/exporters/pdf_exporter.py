@@ -1,16 +1,13 @@
-import os
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
     Spacer,
     Table,
-    TableStyle
+    TableStyle,
 )
 
 from reportlab.lib import colors
-from reportlab.lib.styles import (
-    ParagraphStyle
-)
+
 from theme.fonts import register_fonts
 from theme.styles import (
     TITLE_STYLE,
@@ -18,115 +15,98 @@ from theme.styles import (
     QUESTION_STYLE,
     HEADER_STYLE,
 )
-from reportlab.lib.enums import TA_CENTER
+
 
 class PDFExporter:
 
-    def export(
-        self,
-        filename,
-        worksheet_data
-    ):
+    def export(self, filename, worksheet_data):
+
         register_fonts()
+
         doc = SimpleDocTemplate(
             filename,
             leftMargin=25,
             rightMargin=25,
             topMargin=20,
-            bottomMargin=20
-        )
-
-      
-
-        title_style = ParagraphStyle(
-            "Title",
-            fontName="Helvetica",
-            fontSize=22
-        )
-
-        section_style = ParagraphStyle(
-            "Section",
-            fontName="Helvetica"
-        )
-
-        question_style = ParagraphStyle(
-            "Question",
-            fontName="Helvetica",
-            fontSize=14,
+            bottomMargin=20,
         )
 
         content = []
+
+        # ==========================
+        # Header
+        # ==========================
+
         content.append(
             Paragraph(
                 "MATHPRESCHOOL",
-                title_style
+                TITLE_STYLE
             )
         )
 
-        content.append(
-            Spacer(1, 10)
-        )
+        content.append(Spacer(1, 12))
 
         content.append(
             Paragraph(
-                "Name: _______________________",
+                "Name: ______________________________",
                 HEADER_STYLE
             )
         )
 
-        content.append(
-            Spacer(1, 15)
-        )
+        content.append(Spacer(1, 20))
+
+        # ==========================
+        # Sections
+        # ==========================
 
         for section in worksheet_data:
 
-            content.append(
-                Paragraph(
-                    section_style
-                )
+            header = Table(
+                [[Paragraph(section["title"], SECTION_STYLE)]],
+                colWidths=[540]
             )
 
-            content.append(
-                Spacer(1, 5)
+            header.setStyle(
+                TableStyle([
+                    ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#E3F2FD")),
+                    ("TEXTCOLOR", (0, 0), (-1, -1), colors.HexColor("#1565C0")),
+                    ("LINEBELOW", (0, 0), (-1, -1), 1, colors.HexColor("#1565C0")),
+                    ("LEFTPADDING", (0, 0), (-1, -1), 8),
+                    ("TOPPADDING", (0, 0), (-1, -1), 6),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+                ])
             )
 
-            rows = []
+            content.append(header)
+
+            content.append(Spacer(1, 8))
 
             questions = section["questions"]
 
             half = (len(questions) + 1) // 2
 
             left = questions[:half]
+
             right = questions[half:]
 
             while len(right) < len(left):
                 right.append(None)
 
+            rows = []
+
             for i in range(len(left)):
 
-                left_text = (
-                    f"{i+1}. {left[i].text}"
-                )
+                left_text = left[i].text
 
                 if right[i]:
-                    right_text = (
-                        f"{half+i+1}. {right[i].text}"
-                    )
+                    right_text = right[i].text
                 else:
                     right_text = ""
 
-                rows.append(
-                    [
-                        Paragraph(
-                            left_text,
-                            question_style
-                        ),
-                        Paragraph(
-                            right_text,
-                            question_style
-                        )
-                    ]
-                )
+                rows.append([
+                    Paragraph(left_text, QUESTION_STYLE),
+                    Paragraph(right_text, QUESTION_STYLE)
+                ])
 
             table = Table(
                 rows,
@@ -135,15 +115,13 @@ class PDFExporter:
 
             table.setStyle(
                 TableStyle([
-                    ("VALIGN", (0,0), (-1,-1), "TOP"),
-                    ("BOTTOMPADDING", (0,0), (-1,-1), 4),
+                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
                 ])
             )
 
             content.append(table)
 
-            content.append(
-                Spacer(1, 10)
-            )
+            content.append(Spacer(1, 15))
 
         doc.build(content)
