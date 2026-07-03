@@ -6,34 +6,20 @@ from reportlab.platypus import (
     Table,
     TableStyle
 )
-# from reportlab.pdfbase import pdfmetrics
-# from reportlab.pdfbase.ttfonts import TTFont
+
 from reportlab.lib import colors
 from reportlab.lib.styles import (
     getSampleStyleSheet,
     ParagraphStyle
 )
-
+from theme.fonts import register_fonts
+from theme.styles import (
+    TITLE_STYLE,
+    SECTION_STYLE,
+    QUESTION_STYLE,
+    HEADER_STYLE,
+)
 from reportlab.lib.enums import TA_CENTER
-
-# BASE_DIR = os.path.dirname(
-#     os.path.dirname(
-#         os.path.abspath(__file__)
-#     )
-# )
-
-# FONT_PATH = os.path.join(
-#     BASE_DIR,
-#     "assets",
-#     "NotoSans-Regular.ttf"
-# )
-
-# print("FONT_PATH =", FONT_PATH)
-# print("EXISTS =", os.path.exists(FONT_PATH))
-
-# pdfmetrics.registerFont(
-#     TTFont("NotoSans", FONT_PATH)
-# )
 
 class PDFExporter:
 
@@ -42,12 +28,7 @@ class PDFExporter:
         filename,
         worksheet_data
     ):
-        # pdfmetrics.registerFont(
-        #     TTFont(
-        #         "NotoSans",
-        #         "assets/NotoSans-Regular.ttf"
-        #     )
-        # )
+        register_fonts()
         doc = SimpleDocTemplate(
             filename,
             leftMargin=25,
@@ -77,9 +58,6 @@ class PDFExporter:
         )
 
         content = []
-
-        # Header
-
         content.append(
             Paragraph(
                 "MATHPRESCHOOL",
@@ -101,8 +79,6 @@ class PDFExporter:
         content.append(
             Spacer(1, 15)
         )
-
-        # Sections
 
         for section in worksheet_data:
 
