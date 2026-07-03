@@ -8,10 +8,10 @@ from reportlab.platypus import (
 )
 
 from reportlab.lib import colors
-from reportlab.lib.styles import (
-    getSampleStyleSheet,
-    ParagraphStyle
-)
+# from reportlab.lib.styles import (
+#     getSampleStyleSheet,
+#     ParagraphStyle
+# )
 from theme.fonts import register_fonts
 from theme.styles import (
     TITLE_STYLE,
@@ -37,7 +37,7 @@ class PDFExporter:
             bottomMargin=20
         )
 
-        styles = getSampleStyleSheet()
+      
 
         title_style = ParagraphStyle(
             "Title",
@@ -52,7 +52,6 @@ class PDFExporter:
 
         question_style = ParagraphStyle(
             "Question",
-            parent=styles["Normal"],
             fontName="Helvetica",
             fontSize=14,
         )
@@ -84,7 +83,6 @@ class PDFExporter:
 
             content.append(
                 Paragraph(
-                    section["title"],
                     section_style
                 )
             )
