@@ -71,8 +71,8 @@ class PDFExporter:
 
         content.append(
             Paragraph(
-                "Student Name: __________________________",
-                question_style
+                "Name: _______________________",
+                HEADER_STYLE
             )
         )
 
