@@ -22,7 +22,6 @@ SECTION_STYLE = ParagraphStyle(
     fontSize=15,
     leading=20,
 )
-
 QUESTION_STYLE = ParagraphStyle(
     "QUESTION",
     fontName=FONT,
