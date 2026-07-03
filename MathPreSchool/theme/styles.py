@@ -3,7 +3,7 @@ from reportlab.lib.enums import TA_CENTER
 
 from theme.fonts import (
     register_fonts,
-    get_font,
+    get_font
 )
 
 register_fonts()
