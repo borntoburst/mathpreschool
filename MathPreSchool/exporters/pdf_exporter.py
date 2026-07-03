@@ -8,10 +8,9 @@ from reportlab.platypus import (
 )
 
 from reportlab.lib import colors
-# from reportlab.lib.styles import (
-#     getSampleStyleSheet,
-#     ParagraphStyle
-# )
+from reportlab.lib.styles import (
+    ParagraphStyle
+)
 from theme.fonts import register_fonts
 from theme.styles import (
     TITLE_STYLE,
