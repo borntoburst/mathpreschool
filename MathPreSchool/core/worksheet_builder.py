@@ -1,28 +1,31 @@
 from utils.uniqueness import UniqueQuestionGenerator
 
+
 class WorksheetBuilder:
 
-    def __init__(self, generators):
-        self.generators = generators
+    def __init__(self, sections):
+
+        self.sections = sections
+
+        self.unique = UniqueQuestionGenerator()
 
     def build(self, config):
 
-        unique = UniqueQuestionGenerator()
+        worksheet = []
 
-        worksheet_data = []
         answers = []
 
-        for title, generator, count in self.generators:
+        for section in self.sections:
 
             questions = []
 
-            for _ in range(count):
+            for _ in range(section.count):
 
                 while True:
 
-                    q = generator.generate(config)
+                    q = section.generator.generate(config)
 
-                    if unique.add(q.text):
+                    if self.unique.add(q.text):
                         break
 
                 questions.append(q)
@@ -32,9 +35,21 @@ class WorksheetBuilder:
                     "answer": q.answer
                 })
 
-            worksheet_data.append({
-                "title": title,
-                "questions": questions
+            worksheet.append({
+
+                "title": section.title,
+
+                "questions": questions,
+
+                "priority": section.priority,
+
+                "color": section.color,
+
+                "icon": section.icon
+
+            })
+
+        return worksheet, answers                "questions": questions
             })
 
         return worksheet_data, answers
