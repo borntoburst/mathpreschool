@@ -45,7 +45,8 @@ finger_limit = st.number_input(
     max_value=10,
     value=10
 )
-
+print(type(section))
+print(section)
 # ===========================
 # GENERATE
 # ===========================
