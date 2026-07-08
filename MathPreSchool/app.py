@@ -45,8 +45,7 @@ finger_limit = st.number_input(
     max_value=10,
     value=10
 )
-print(type(section))
-print(section)
+
 # ===========================
 # GENERATE
 # ===========================
@@ -77,7 +76,8 @@ if st.button("Generate Worksheet"):
     # ===========================
     # PREVIEW
     # ===========================
-    
+    print(type(section))
+    print(section)
     for section in worksheet_data:
         st.subheader(section["title"])
         for q in section["questions"]:
