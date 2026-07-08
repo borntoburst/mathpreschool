@@ -13,6 +13,8 @@ from generators.pattern import PatternGenerator
 from generators.multistep import MultiStepGenerator
 from core.worksheet_builder import WorksheetBuilder
 
+builder = WorksheetBuilder(generators)
+worksheet_data, all_answers = builder.build(config)
 unique_checker = UniqueQuestionGenerator()
 st.title("MathPreSchool Worksheet Generator")
 
@@ -75,8 +77,7 @@ if st.button("Generate"):
     worksheet_data = []
     all_answers = []
 
-builder = WorksheetBuilder(generators)
-worksheet_data, all_answers = builder.build(config)
+
 
     
 
