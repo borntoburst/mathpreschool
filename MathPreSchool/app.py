@@ -1,39 +1,56 @@
-import streamlit as st
 import os
-
-os.makedirs("output", exist_ok=True)
-from exporters.pdf_exporter import PDFExporter
-from exporters.answer_exporter import AnswerExporter
+import streamlit as st
+from models.section_config import SectionConfig
 from models.config import WorksheetConfig
-from utils.uniqueness import UniqueQuestionGenerator
+
 from generators.counting import CountingGenerator
 from generators.missing_number import MissingNumberGenerator
 from generators.comparison import ComparisonGenerator
 from generators.pattern import PatternGenerator
 from generators.multistep import MultiStepGenerator
+
 from core.worksheet_builder import WorksheetBuilder
 
-builder = WorksheetBuilder(generators)
-worksheet_data, all_answers = builder.build(config)
-unique_checker = UniqueQuestionGenerator()
-st.title("MathPreSchool Worksheet Generator")
+from exporters.pdf_exporter import PDFExporter
+from exporters.answer_exporter import AnswerExporter
+
+os.makedirs("output", exist_ok=True)
+
+st.set_page_config(
+    page_title="MathPreSchool",
+    layout="wide"
+)
+
+st.title("🧮 MathPreSchool Worksheet Generator")
+
+# ===========================
+# CONFIG
+# ===========================
 
 min_number = st.number_input(
     "Min Number",
+    min_value=0,
     value=0
 )
 
 max_number = st.number_input(
     "Max Number",
+    min_value=10,
     value=100
 )
 
 finger_limit = st.number_input(
     "Finger Limit",
+    min_value=5,
+    max_value=10,
     value=10
 )
 
-if st.button("Generate"):
+# ===========================
+# GENERATE
+# ===========================
+
+if st.button("Generate Worksheet"):
 
     config = WorksheetConfig(
         min_number=min_number,
@@ -41,78 +58,85 @@ if st.button("Generate"):
         finger_limit=finger_limit
     )
 
-    generators = [
-        (
-            "CÂU 1. ĐẾM THÊM - ĐẾM BỚT",
-            CountingGenerator(),
-            config.q1_count
-        ),
-    
-        (
-            "CÂU 2. ĐIỀN SỐ CÒN THIẾU",
-            MissingNumberGenerator(),
-            config.q2_count
-        ),
-    
-        (
-            "CÂU 3. SO SÁNH",
-            ComparisonGenerator(),
-            config.q3_count
-        ),
-    
-        (
-            "CÂU 4. TÌM QUY LUẬT",
-            PatternGenerator(),
-            config.q4_count
-        ),
-    
-        (
-            "CÂU 5. TÍNH NHIỀU BƯỚC",
-            MultiStepGenerator(),
-            config.q5_count
-        )
+    sections = [
+        SectionConfig(title="CÂU 1. ĐẾM THÊM - ĐẾM BỚT",generator=CountingGenerator(),count=config.q1_count,priority=5,color="#4CAF50"),
+        SectionConfig(title="CÂU 2. ĐIỀN SỐ CÒN THIẾU",generator=MissingNumberGenerator(),count=config.q2_count,priority=5,color="#2196F3"),
+        SectionConfig(title="CÂU 3. SO SÁNH",generator=ComparisonGenerator(),count=config.q3_count,priority=4,color="#FFC107"),
+        SectionConfig(title="CÂU 4. TÌM QUY LUẬT",generator=PatternGenerator(),count=config.q4_count,priority=3,color="#9C27B0"),
+        SectionConfig(title="CÂU 5. TÍNH NHIỀU BƯỚC",generator=MultiStepGenerator(),count=config.q5_count,priority=4,color="#FF5722")
     ]
 
-    answers = []
-    worksheet_data = []
-    all_answers = []
+    # ===========================
+    # BUILD WORKSHEET
+    # ===========================
 
+    builder = WorksheetBuilder(sections)
+    worksheet_data, all_answers = builder.build(config)
 
-
+    # ===========================
+    # PREVIEW
+    # ===========================
     
+    for section in worksheet_data:
+        st.subheader(section["title"])
+        for q in section["questions"]:
+            st.write(q.text)
 
-    pdf_exporter = PDFExporter()
+    # ===========================
+    # ANSWER KEY
+    # ===========================
 
-    pdf_exporter.export(
-        "output/mathpreschool_worksheet.pdf",
+    st.divider()
+
+    st.header("Answer Key")
+
+    for item in all_answers:
+
+        st.write(
+            f'{item["question"]} → {item["answer"]}'
+        )
+
+    # ===========================
+    # EXPORT PDF
+    # ===========================
+
+    worksheet_pdf = "output/mathpreschool_worksheet.pdf"
+    answer_pdf = "output/mathpreschool_answers.pdf"
+
+    PDFExporter().export(
+        worksheet_pdf,
         worksheet_data
     )
 
-    answer_exporter = AnswerExporter()
-
-    answer_exporter.export(
-        "output/mathpreschool_answers.pdf",
+    AnswerExporter().export(
+        answer_pdf,
         all_answers
     )
 
-    with open(
-        "output/mathpreschool_worksheet.pdf",
-        "rb"
-    ) as file:
+    # ===========================
+    # DOWNLOAD
+    # ===========================
 
-        st.download_button(
-            "Download Worksheet PDF",
-            file,
-            file_name="mathpreschool_worksheet.pdf"
-        )
+    col1, col2 = st.columns(2)
 
-    with open(
-        "output/mathpreschool_answers.pdf",
-        "rb"
-    ) as file:
+    with col1:
 
-        st.download_button(
-            "Download Answer PDF",
-            file,
-            file_name="mathpreschool_answers.pdf"
-        )
+        with open(worksheet_pdf, "rb") as file:
+
+            st.download_button(
+                label="📄 Download Worksheet",
+                data=file,
+                file_name="mathpreschool_worksheet.pdf",
+                mime="application/pdf"
+            )
+
+    with col2:
+
+        with open(answer_pdf, "rb") as file:
+
+            st.download_button(
+                label="✅ Download Answer Key",
+                data=file,
+                file_name="mathpreschool_answers.pdf",
+                mime="application/pdf"
+            )
