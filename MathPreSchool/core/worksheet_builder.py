@@ -49,7 +49,4 @@ class WorksheetBuilder:
 
             })
 
-        return worksheet, answers                "questions": questions
-            })
-
-        return worksheet_data, answers
+        return worksheet, answers
