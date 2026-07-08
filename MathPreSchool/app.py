@@ -76,8 +76,6 @@ if st.button("Generate Worksheet"):
     # ===========================
     # PREVIEW
     # ===========================
-    print(type(section))
-    print(section)
     for section in worksheet_data:
         st.subheader(section["title"])
         for q in section["questions"]:
