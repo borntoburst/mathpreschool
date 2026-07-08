@@ -11,6 +11,7 @@ from generators.missing_number import MissingNumberGenerator
 from generators.comparison import ComparisonGenerator
 from generators.pattern import PatternGenerator
 from generators.multistep import MultiStepGenerator
+from core.worksheet_builder import WorksheetBuilder
 
 unique_checker = UniqueQuestionGenerator()
 st.title("MathPreSchool Worksheet Generator")
@@ -74,38 +75,8 @@ if st.button("Generate"):
     worksheet_data = []
     all_answers = []
 
-    for title, gen, count in generators:
-
-        st.subheader(title)
-        section_questions = []
-        for _ in range(count):
-
-            while True:
-
-                q = gen.generate(config)
-            
-                if unique_checker.add(q.text):
-                    break
-
-            st.write(q.text)
-            section_questions.append(q)
-            
-            all_answers.append({
-                "question": q.text,
-                "answer": q.answer
-            })
-        worksheet_data.append({
-            "title": title,
-            "questions": section_questions
-        })
-    st.divider()
-    st.subheader("Answer Key")
-
-    for item in all_answers:
-
-        st.write(
-            f"{item['question']} → {item['answer']}"
-        )
+builder = WorksheetBuilder(generators)
+worksheet_data, all_answers = builder.build(config)
 
     for q,a in answers:
         st.write(
