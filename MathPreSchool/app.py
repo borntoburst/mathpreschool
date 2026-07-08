@@ -78,10 +78,7 @@ if st.button("Generate"):
 builder = WorksheetBuilder(generators)
 worksheet_data, all_answers = builder.build(config)
 
-    for q,a in answers:
-        st.write(
-            f"{q} → {a}"
-        )
+    
 
     pdf_exporter = PDFExporter()
 
