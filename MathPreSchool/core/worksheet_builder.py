@@ -14,7 +14,8 @@ class WorksheetBuilder:
         worksheet = []
 
         answers = []
-
+        print(type(section))
+        print(section)
         for section in self.sections:
 
             questions = []
