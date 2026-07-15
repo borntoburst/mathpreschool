@@ -109,7 +109,7 @@ if st.button("🚀 Generate Worksheet"):
 
     builder = WorksheetBuilder(config)
 
-    worksheet_data, answer_data = builder.build(sections)
+    worksheet_data = builder.build(sections)
 
     st.divider()
 
