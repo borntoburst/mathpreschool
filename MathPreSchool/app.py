@@ -13,7 +13,6 @@ from generators.multistep import MultiStepGenerator
 from core.worksheet_builder import WorksheetBuilder
 
 from exporters.pdf_exporter import PDFExporter
-from exporters.answer_exporter import AnswerExporter
 
 os.makedirs("output", exist_ok=True)
 
@@ -124,47 +123,18 @@ if st.button("🚀 Generate Worksheet"):
 
             st.write(question.text)
 
-    st.divider()
-
-    st.header("✅ Answer Key")
-
-    for item in answer_data:
-
-        st.write(
-            f'{item["question"]} → {item["answer"]}'
-        )
-
     worksheet_pdf = "output/mathpreschool_worksheet.pdf"
-    answer_pdf = "output/mathpreschool_answers.pdf"
 
     PDFExporter().export(
         worksheet_pdf,
         worksheet_data
     )
 
-    AnswerExporter().export(
-        answer_pdf,
-        answer_data
-    )
+    st.columns()
 
-    c1, c2 = st.columns(2)
+    
+    with open(worksheet_pdf, "rb") as file:
+        st.download_button("📄 Download Worksheet",file,file_name="mathpreschool_worksheet.pdf")
 
-    with c1:
-
-        with open(worksheet_pdf, "rb") as file:
-
-            st.download_button(
-                "📄 Download Worksheet",
-                file,
-                file_name="mathpreschool_worksheet.pdf"
-            )
-
-    with c2:
-
-        with open(answer_pdf, "rb") as file:
-
-            st.download_button(
-                "✅ Download Answer",
-                file,
+    
                 file_name="mathpreschool_answers.pdf"
-            )
