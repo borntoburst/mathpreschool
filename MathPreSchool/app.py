@@ -1,7 +1,8 @@
 import os
 import streamlit as st
-from models.section_config import SectionConfig
+
 from models.config import WorksheetConfig
+from models.section_config import SectionConfig
 
 from generators.counting import CountingGenerator
 from generators.missing_number import MissingNumberGenerator
@@ -23,34 +24,39 @@ st.set_page_config(
 
 st.title("🧮 MathPreSchool Worksheet Generator")
 
-# ===========================
+# =========================
 # CONFIG
-# ===========================
+# =========================
 
-min_number = st.number_input(
-    "Min Number",
-    min_value=0,
-    value=0
-)
+col1, col2, col3 = st.columns(3)
 
-max_number = st.number_input(
-    "Max Number",
-    min_value=10,
-    value=100
-)
+with col1:
+    min_number = st.number_input(
+        "Min Number",
+        min_value=0,
+        value=0
+    )
 
-finger_limit = st.number_input(
-    "Finger Limit",
-    min_value=5,
-    max_value=10,
-    value=10
-)
+with col2:
+    max_number = st.number_input(
+        "Max Number",
+        min_value=10,
+        value=100
+    )
 
-# ===========================
+with col3:
+    finger_limit = st.number_input(
+        "Finger Limit",
+        min_value=5,
+        max_value=10,
+        value=10
+    )
+
+# =========================
 # GENERATE
-# ===========================
+# =========================
 
-if st.button("Generate Worksheet"):
+if st.button("🚀 Generate Worksheet"):
 
     config = WorksheetConfig(
         min_number=min_number,
@@ -59,45 +65,74 @@ if st.button("Generate Worksheet"):
     )
 
     sections = [
-        SectionConfig(title="CÂU 1. ĐẾM THÊM - ĐẾM BỚT",generator=CountingGenerator(),count=config.q1_count,priority=5,color="#4CAF50"),
-        SectionConfig(title="CÂU 2. ĐIỀN SỐ CÒN THIẾU",generator=MissingNumberGenerator(),count=config.q2_count,priority=5,color="#2196F3"),
-        SectionConfig(title="CÂU 3. SO SÁNH",generator=ComparisonGenerator(),count=config.q3_count,priority=4,color="#FFC107"),
-        SectionConfig(title="CÂU 4. TÌM QUY LUẬT",generator=PatternGenerator(),count=config.q4_count,priority=3,color="#9C27B0"),
-        SectionConfig(title="CÂU 5. TÍNH NHIỀU BƯỚC",generator=MultiStepGenerator(),count=config.q5_count,priority=4,color="#FF5722")
+
+        SectionConfig(
+            title="CÂU 1. ĐẾM THÊM - ĐẾM BỚT",
+            generator=CountingGenerator(),
+            count=config.q1_count,
+            priority=5,
+            color="#4CAF50"
+        ),
+
+        SectionConfig(
+            title="CÂU 2. ĐIỀN SỐ CÒN THIẾU",
+            generator=MissingNumberGenerator(),
+            count=config.q2_count,
+            priority=5,
+            color="#2196F3"
+        ),
+
+        SectionConfig(
+            title="CÂU 3. SO SÁNH",
+            generator=ComparisonGenerator(),
+            count=config.q3_count,
+            priority=4,
+            color="#FFC107"
+        ),
+
+        SectionConfig(
+            title="CÂU 4. TÌM QUY LUẬT",
+            generator=PatternGenerator(),
+            count=config.q4_count,
+            priority=3,
+            color="#9C27B0"
+        ),
+
+        SectionConfig(
+            title="CÂU 5. TÍNH NHIỀU BƯỚC",
+            generator=MultiStepGenerator(),
+            count=config.q5_count,
+            priority=4,
+            color="#FF5722"
+        )
+
     ]
 
-    # ===========================
-    # BUILD WORKSHEET
-    # ===========================
+    builder = WorksheetBuilder(config)
 
-    builder = WorksheetBuilder(sections)
-    worksheet_data, all_answers = builder.build(config)
-
-    # ===========================
-    # PREVIEW
-    # ===========================
-    for section in worksheet_data:
-        st.subheader(section["title"])
-        for q in section["questions"]:
-            st.write(q.text)
-
-    # ===========================
-    # ANSWER KEY
-    # ===========================
+    worksheet_data, answer_data = builder.build(sections)
 
     st.divider()
 
-    st.header("Answer Key")
+    st.header("📄 Worksheet Preview")
 
-    for item in all_answers:
+    for section in worksheet_data:
+
+        st.subheader(section["title"])
+
+        for question in section["questions"]:
+
+            st.write(question.text)
+
+    st.divider()
+
+    st.header("✅ Answer Key")
+
+    for item in answer_data:
 
         st.write(
             f'{item["question"]} → {item["answer"]}'
         )
-
-    # ===========================
-    # EXPORT PDF
-    # ===========================
 
     worksheet_pdf = "output/mathpreschool_worksheet.pdf"
     answer_pdf = "output/mathpreschool_answers.pdf"
@@ -109,33 +144,27 @@ if st.button("Generate Worksheet"):
 
     AnswerExporter().export(
         answer_pdf,
-        all_answers
+        answer_data
     )
 
-    # ===========================
-    # DOWNLOAD
-    # ===========================
+    c1, c2 = st.columns(2)
 
-    col1, col2 = st.columns(2)
-
-    with col1:
+    with c1:
 
         with open(worksheet_pdf, "rb") as file:
 
             st.download_button(
-                label="📄 Download Worksheet",
-                data=file,
-                file_name="mathpreschool_worksheet.pdf",
-                mime="application/pdf"
+                "📄 Download Worksheet",
+                file,
+                file_name="mathpreschool_worksheet.pdf"
             )
 
-    with col2:
+    with c2:
 
         with open(answer_pdf, "rb") as file:
 
             st.download_button(
-                label="✅ Download Answer Key",
-                data=file,
-                file_name="mathpreschool_answers.pdf",
-                mime="application/pdf"
+                "✅ Download Answer",
+                file,
+                file_name="mathpreschool_answers.pdf"
             )
