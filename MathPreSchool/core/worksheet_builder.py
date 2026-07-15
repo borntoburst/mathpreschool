@@ -3,37 +3,45 @@ from utils.uniqueness import UniqueQuestionGenerator
 
 class WorksheetBuilder:
 
-    def __init__(self, sections):
+    def __init__(self, config):
 
-        self.sections = sections
-
+        self.config = config
         self.unique = UniqueQuestionGenerator()
 
-    def build(self, config):
+    def _generate_unique(self, generator):
+
+        while True:
+
+            question = generator.generate(self.config)
+
+            if self.unique.add(question.text):
+
+                return question
+
+    def build(self, sections):
 
         worksheet = []
 
         answers = []
-        print(type(section))
-        print(section)
-        for section in self.sections:
+
+        for section in sections:
 
             questions = []
 
-            for _ in range(section.count):
+            for _ in range(int(section.count)):
 
-                while True:
-
-                    q = section.generator.generate(config)
-
-                    if self.unique.add(q.text):
-                        break
+                q = self._generate_unique(
+                    section.generator
+                )
 
                 questions.append(q)
 
                 answers.append({
+
                     "question": q.text,
+
                     "answer": q.answer
+
                 })
 
             worksheet.append({
