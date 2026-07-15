@@ -8,54 +8,31 @@ class WorksheetBuilder:
         self.config = config
         self.unique = UniqueQuestionGenerator()
 
-    def _generate_unique(self, generator):
-
-        while True:
-
-            question = generator.generate(self.config)
-
-            if self.unique.add(question.text):
-
-                return question
-
     def build(self, sections):
 
         worksheet = []
 
-        answers = []
-
         for section in sections:
 
-            questions = []
+            section_questions = []
 
-            for _ in range(int(section.count)):
+            for _ in range(section.count):
 
-                q = self._generate_unique(
-                    section.generator
-                )
+                while True:
 
-                questions.append(q)
+                    q = section.generator.generate(self.config)
 
-                answers.append({
+                    if self.unique.add(q.text):
+                        break
 
-                    "question": q.text,
-
-                    "answer": q.answer
-
-                })
+                section_questions.append(q)
 
             worksheet.append({
-
                 "title": section.title,
-
-                "questions": questions,
-
+                "questions": section_questions,
                 "priority": section.priority,
-
                 "color": section.color,
-
-                "icon": section.icon
-
+                "icon": getattr(section, "icon", "")
             })
 
-        return worksheet, answers
+        return worksheet
